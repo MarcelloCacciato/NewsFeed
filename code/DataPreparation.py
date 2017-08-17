@@ -19,20 +19,20 @@ import mpld3
 filepath_or_buffer = '../data/articles.csv'
 
 
-# In[7]:
+# In[3]:
 
 #import a data frame with 4 columns: orders, titles, descriptions, and articles
 df = pd.read_csv(filepath_or_buffer)
 print "number of articles: ",df.shape[0]
 
 
-# In[19]:
+# In[4]:
 
 header_df = list(df)
 print header_df
 
 
-# In[27]:
+# In[5]:
 
 for i in range(0,df.shape[1]):
     print len(df[str(header_df[i])]), header_df[i]
@@ -40,20 +40,20 @@ for i in range(0,df.shape[1]):
         print "problem with number of rows in column",header_df[i]
 
 
-# In[28]:
+# In[6]:
 
 # load nltk's English stopwords as variable called 'stopwords'
 stopwords = nltk.corpus.stopwords.words('english')
 
 
-# In[29]:
+# In[7]:
 
 # load nltk's SnowballStemmer as variabled 'stemmer'
 from nltk.stem.snowball import SnowballStemmer
 stemmer = SnowballStemmer("english")
 
 
-# In[30]:
+# In[8]:
 
 # here I define a tokenizer and stemmer which returns the set of stems in the text that it is passed
 
@@ -80,7 +80,7 @@ def tokenize_only(text):
     return filtered_tokens
 
 
-# In[71]:
+# In[9]:
 
 synopses_des = df['description']
 synopses_feed = df['feed_article']
@@ -101,7 +101,7 @@ for text in synopses_feed:
 synopses_feed = synopses_clean 
 
 
-# In[73]:
+# In[10]:
 
 '''
 # I do this analyses on the description only!
@@ -132,7 +132,7 @@ for i in synopses_feed:
 #print des_vocab_frame
 
 
-# In[77]:
+# In[11]:
 
 #on entire feed article:
 feed_vocab_frame = pd.DataFrame({'words': feed_vocab_tokenized}, index = feed_vocab_stemmed)
@@ -140,7 +140,7 @@ print(feed_vocab_frame)
 #print feed_vocab_frame
 
 
-# In[78]:
+# In[12]:
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 
@@ -153,19 +153,19 @@ get_ipython().magic(u'time tfidf_matrix = tfidf_vectorizer.fit_transform(synopse
 print(tfidf_matrix.shape)
 
 
-# In[79]:
+# In[13]:
 
 terms = tfidf_vectorizer.get_feature_names()
 
 
-# In[81]:
+# In[14]:
 
 from sklearn.metrics.pairwise import cosine_similarity
 dist = 1 - cosine_similarity(tfidf_matrix)
 print(dist)
 
 
-# In[82]:
+# In[15]:
 
 import matplotlib.pyplot as plt
 # Display matrix
@@ -174,13 +174,151 @@ plt.matshow(dist.reshape((244, 244)))
 plt.show()
 
 
-# In[116]:
+# In[16]:
 
-tfidf_mat = np.matrix(tfidf_matrix)
-with open('outfile3.txt','wb') as f:
-    for line in tfidf_mat:
-        np.savetxt(f, line)
-        #, fmt='%.2f')
+tfidf_mat = tfidf_matrix.toarray()
+print tfidf_mat
+
+
+# In[19]:
+
+from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score
+
+X = tfidf_mat
+for n_cluster in range(2, 11):
+    kmeans = KMeans(n_clusters=n_cluster).fit(X)
+    label = kmeans.labels_
+    sil_coeff = silhouette_score(X, label, metric='euclidean')
+    print("For n_clusters={}, The Silhouette Coefficient is {}".format(n_cluster, sil_coeff))
+
+
+# In[20]:
+
+for n_cluster in range(11, 21):
+    kmeans = KMeans(n_clusters=n_cluster).fit(X)
+    label = kmeans.labels_
+    sil_coeff = silhouette_score(X, label, metric='euclidean')
+    print("For n_clusters={}, The Silhouette Coefficient is {}".format(n_cluster, sil_coeff))
+
+
+# In[22]:
+
+# k means determine k
+from scipy.spatial.distance import cdist
+distortions = []
+K = range(1,10)
+for k in K:
+    kmeanModel = KMeans(n_clusters=k).fit(X)
+    kmeanModel.fit(X)
+    distortions.append(sum(np.min(cdist(X, kmeanModel.cluster_centers_, 'euclidean'), axis=1)) / X.shape[0])
+
+
+# In[23]:
+
+# Plot the elbow
+plt.plot(K, distortions, 'bx-')
+plt.xlabel('k')
+plt.ylabel('Distortion')
+plt.title('The Elbow Method showing the optimal k')
+plt.show()
+
+
+# In[24]:
+
+K = range(10,21)
+for k in K:
+    kmeanModel = KMeans(n_clusters=k).fit(X)
+    kmeanModel.fit(X)
+    distortions.append(sum(np.min(cdist(X, kmeanModel.cluster_centers_, 'euclidean'), axis=1)) / X.shape[0])
+
+
+# In[26]:
+
+K = range(1,21)
+# Plot the elbow
+plt.plot(K, distortions, 'bx-')
+plt.xlabel('k')
+plt.ylabel('Distortion')
+plt.title('The Elbow Method showing the optimal k')
+plt.show()
+
+
+# In[31]:
+
+def compute_bic(kmeans,X):
+    """
+    Computes the BIC metric for a given clusters
+
+    Parameters:
+    -----------------------------------------
+    kmeans:  List of clustering object from scikit learn
+
+    X     :  multidimension np array of data points
+
+    Returns:
+    -----------------------------------------
+    BIC value
+    """
+    # assign centers and labels
+    centers = [kmeans.cluster_centers_]
+    labels  = kmeans.labels_
+    #number of clusters
+    m = kmeans.n_clusters
+    # size of the clusters
+    n = np.bincount(labels)
+    #size of data set
+    N, d = X.shape
+
+    #compute variance for all clusters beforehand
+    cl_var = (1.0 / (N - m) / d) * sum([sum(distance.cdist(X[np.where(labels == i)], [centers[0][i]], 
+             'euclidean')**2) for i in range(m)])
+
+    const_term = 0.5 * m * np.log(N) * (d+1)
+
+    BIC = np.sum([n[i] * np.log(n[i]) -
+               n[i] * np.log(N) -
+             ((n[i] * d) / 2) * np.log(2*np.pi*cl_var) -
+             ((n[i] - 1) * d/ 2) for i in range(m)]) - const_term
+
+    return(BIC)
+
+
+# In[32]:
+
+ks = range(1,10)
+
+
+# In[34]:
+
+from sklearn import cluster
+# run 9 times kmeans and save each result in the KMeans object
+KMeans = [cluster.KMeans(n_clusters = i, init="k-means++").fit(X) for i in ks]
+
+
+# In[36]:
+
+from scipy.spatial import distance
+# now run for each cluster the BIC computation
+BIC = [compute_bic(kmeansi,X) for kmeansi in KMeans]
+
+print BIC
+
+
+# In[42]:
+
+import numpy as np
+#from sklearn.cluster import KMeans
+from sklearn.metrics import pairwise_distances
+
+#kmeans_model = KMeans(n_clusters=3, random_state=1).fit(X)
+#labels = kmeans_model.labels_
+#metrics.calinski_harabaz_score(X, labels)
+for count in range(2, 21):
+    kmeans_mod = KMeans(n_clusters=count, random_state=1).fit(X)
+    lab = kmeans_mod.labels_
+    #labels = kmeans_model.labels_
+    print count, metrics.calinski_harabaz_score(X, lab)
 
 
 # In[83]:

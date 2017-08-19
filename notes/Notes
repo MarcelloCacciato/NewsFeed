@@ -1,0 +1,13 @@
+- use a supervised machine learning, exploting the fact that there might exists class of topics which group words together
+
+- do a 'sensitivity' test using different distances (e.g. euclidean and cosine similarity).
+
+- do a similarity test using different 'metrics' to define 'optimal' clustering 
+
+- do a 'scalability' test, checking which method seems to be consistent as the data set size grows (e.g. check results with 100 articles, 200, and 244).
+
+- try to weight differently titles, description, article.
+
+- investigate topic approach instead of article approach (via dirichlet, or perhaps bayesian probability)
+
+

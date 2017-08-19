@@ -14005,53 +14005,6 @@ ROTkfKqaGwUAAAAASUVORK5CYII=
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[42]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="c1">#from sklearn.cluster import KMeans</span>
-<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">pairwise_distances</span>
-
-<span class="c1">#kmeans_model = KMeans(n_clusters=3, random_state=1).fit(X)</span>
-<span class="c1">#labels = kmeans_model.labels_</span>
-<span class="c1">#metrics.calinski_harabaz_score(X, labels)</span>
-<span class="k">for</span> <span class="n">count</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">21</span><span class="p">):</span>
-    <span class="n">kmeans_mod</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="n">count</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-    <span class="n">lab</span> <span class="o">=</span> <span class="n">kmeans_mod</span><span class="o">.</span><span class="n">labels_</span>
-    <span class="c1">#labels = kmeans_model.labels_</span>
-    <span class="k">print</span> <span class="n">count</span><span class="p">,</span> <span class="n">metrics</span><span class="o">.</span><span class="n">calinski_harabaz_score</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">lab</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_text output_error">
-<pre>
-<span class="ansi-red-fg">-------------------------------------------------------</span>
-<span class="ansi-red-fg">TypeError</span>             Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;ipython-input-42-e59b74d7f2b0&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-intense-fg ansi-bold">      7</span> <span class="ansi-red-fg">#metrics.calinski_harabaz_score(X, labels)</span>
-<span class="ansi-green-intense-fg ansi-bold">      8</span> <span class="ansi-green-fg">for</span> count <span class="ansi-green-fg">in</span> range<span class="ansi-blue-fg">(</span><span class="ansi-cyan-fg">2</span><span class="ansi-blue-fg">,</span> <span class="ansi-cyan-fg">21</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">----&gt; 9</span><span class="ansi-red-fg">     </span>kmeans_mod <span class="ansi-blue-fg">=</span> KMeans<span class="ansi-blue-fg">(</span>n_clusters<span class="ansi-blue-fg">=</span>count<span class="ansi-blue-fg">,</span> random_state<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>fit<span class="ansi-blue-fg">(</span>X<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     10</span>     lab <span class="ansi-blue-fg">=</span> kmeans_mod<span class="ansi-blue-fg">.</span>labels_
-<span class="ansi-green-intense-fg ansi-bold">     11</span>     <span class="ansi-red-fg">#labels = kmeans_model.labels_</span>
-
-<span class="ansi-red-fg">TypeError</span>: &#39;list&#39; object is not callable</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
 <div class="prompt input_prompt">In&nbsp;[83]:</div>
 <div class="inner_cell">
     <div class="input_area">

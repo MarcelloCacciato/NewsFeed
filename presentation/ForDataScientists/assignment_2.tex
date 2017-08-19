@@ -32,7 +32,52 @@
 \usepackage{graphicx} % Required to insert images
 \usepackage{listings} % Required for insertion of code
 \usepackage{courier} % Required for the courier font
-\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
+%\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
+%\usepackage[section]{minted}
+\usepackage{listings}
+  \usepackage{courier}
+ \lstset{
+         basicstyle=\footnotesize\ttfamily, % Standardschrift
+         %numbers=left,               % Ort der Zeilennummern
+         numberstyle=\tiny,          % Stil der Zeilennummern
+         %stepnumber=2,               % Abstand zwischen den Zeilennummern
+         numbersep=5pt,              % Abstand der Nummern zum Text
+         tabsize=2,                  % Groesse von Tabs
+         extendedchars=true,         %
+         breaklines=true,            % Zeilen werden Umgebrochen
+         keywordstyle=\color{red},
+            frame=b,         
+ %        keywordstyle=[1]\textbf,    % Stil der Keywords
+ %        keywordstyle=[2]\textbf,    %
+ %        keywordstyle=[3]\textbf,    %
+ %        keywordstyle=[4]\textbf,   \sqrt{\sqrt{}} %
+         stringstyle=\color{white}\ttfamily, % Farbe der String
+         showspaces=false,           % Leerzeichen anzeigen ?
+         showtabs=false,             % Tabs anzeigen ?
+         xleftmargin=17pt,
+         framexleftmargin=17pt,
+         framexrightmargin=5pt,
+         framexbottommargin=4pt,
+         %backgroundcolor=\color{lightgray},
+         showstringspaces=false      % Leerzeichen in Strings anzeigen ?        
+ }
+ \lstloadlanguages{% Check Dokumentation for further languages ...
+         %[Visual]Basic
+         %Pascal
+         %C
+         %C++
+         %XML
+         %HTML
+         Java
+ }
+    %\DeclareCaptionFont{blue}{\color{blue}} 
+
+  %\captionsetup[lstlisting]{singlelinecheck=false, labelfont={blue}, textfont={blue}}
+  \usepackage{caption}
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{\colorbox[cmyk]{0.43, 0.35, 0.35,0.01}{\parbox{\textwidth}{\hspace{15pt}#1#2#3}}}
+\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white, singlelinecheck=false, margin=0pt, font={bf,footnotesize}}
+
 
 % Margins
 \topmargin=-0.45in
@@ -47,8 +92,9 @@
 % Set up the header and footer
 \pagestyle{fancy}
 \lhead{\hmwkAuthorName} % Top left header
-\chead{\hmwkClass\ (\hmwkClassInstructor\ \hmwkClassTime): \hmwkTitle} % Top center head
-\rhead{\firstxmark} % Top right header
+\rhead{\hmwkClass\ (\hmwkClassInstructor\ \hmwkClassTime): \hmwkTitle} % Top center head
+\chead{} % Top right header
+% \firstxmark
 \lfoot{\lastxmark} % Bottom left footer
 \cfoot{} % Bottom center footer
 \rfoot{Page\ \thepage\ of\ \protect\pageref{LastPage}} % Bottom right footer
@@ -119,7 +165,7 @@
 \newcounter{homeworkProblemCounter} % Creates a counter to keep track of the number of problems
 
 \newcommand{\homeworkProblemName}{}
-\newenvironment{homeworkProblem}[1][Problem \arabic{homeworkProblemCounter}]{ % Makes a new environment called homeworkProblem which takes 1 argument (custom name) but the default is "Problem #"
+\newenvironment{homeworkProblem}[1][Section \arabic{homeworkProblemCounter}]{ % Makes a new environment called homeworkProblem which takes 1 argument (custom name) but the default is "Problem #"
 \stepcounter{homeworkProblemCounter} % Increase counter for number of problems
 \renewcommand{\homeworkProblemName}{#1} % Assign \homeworkProblemName the name of the problem
 \section{\homeworkProblemName} % Make a section in the document with the custom problem count
@@ -145,12 +191,12 @@
 %	NAME AND CLASS SECTION
 %----------------------------------------------------------------------------------------
 
-\newcommand{\hmwkTitle}{Assignment\ \#1} % Assignment title
-\newcommand{\hmwkDueDate}{Monday,\ January\ 1,\ 2012} % Due date
-\newcommand{\hmwkClass}{COMPSCI\ 101} % Course/class
-\newcommand{\hmwkClassTime}{10:30am} % Class/lecture time
-\newcommand{\hmwkClassInstructor}{Jones} % Teacher/lecturer
-\newcommand{\hmwkAuthorName}{John Smith} % Your name
+\newcommand{\hmwkTitle}{Document Classification} % Assignment title
+\newcommand{\hmwkDueDate}{Friday,\ September\ 1,\ 2017} % Due date
+\newcommand{\hmwkClass}{Ydatalytics Case Study} % Course/class
+\newcommand{\hmwkClassInstructor}{For Data} % Teacher/lecturer
+\newcommand{\hmwkClassTime}{Scientists} % Class/lecture time
+\newcommand{\hmwkAuthorName}{Dr. Marcello Cacciato} % Your name
 
 %----------------------------------------------------------------------------------------
 %	TITLE PAGE
@@ -189,30 +235,39 @@
 
 % To have just one problem per page, simply put a \clearpage after each problem
 
-\begin{homeworkProblem}
-Listing \ref{homework_example} shows a Perl script.
-
-\perlscript{homework_example}{Sample Perl Script With Highlighting}
-
-\lipsum[1]
-\end{homeworkProblem}
-
 %----------------------------------------------------------------------------------------
 %	PROBLEM 2
 %----------------------------------------------------------------------------------------
 
 \begin{homeworkProblem}
-\lipsum[2]
+%\lipsum[2]
+
+\begin{homeworkSectionName}
+%homeworkProblem
+Listing \ref{homework_example} shows a Perl script.
+
+%\inputminted[fontsize=\scriptsize]{python}{BIC.py}
+\lstinputlisting[label=samplecode,caption=A sample]{BIC.py}
+%linenos
+\perlscript{homework_example}{Sample Perl Script With Highlighting}
+
+%\lipsum[1]
+\end{homeworkSectionName}
+%homeworkProblem
 
 \problemAnswer{
 \begin{center}
 \includegraphics[width=0.75\columnwidth]{example_figure} % Example image
 \end{center}
 
-\lipsum[3-5]
+%\lipsum[3-5]
 }
 \end{homeworkProblem}
 
+%----------------------------------------------------------------------------------------
+%	APPENDIX
+%----------------------------------------------------------------------------------------
+\appendix
 %----------------------------------------------------------------------------------------
 
 \end{document}

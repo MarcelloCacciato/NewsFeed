@@ -305,22 +305,6 @@ BIC = [compute_bic(kmeansi,X) for kmeansi in KMeans]
 print BIC
 
 
-# In[42]:
-
-import numpy as np
-#from sklearn.cluster import KMeans
-from sklearn.metrics import pairwise_distances
-
-#kmeans_model = KMeans(n_clusters=3, random_state=1).fit(X)
-#labels = kmeans_model.labels_
-#metrics.calinski_harabaz_score(X, labels)
-for count in range(2, 21):
-    kmeans_mod = KMeans(n_clusters=count, random_state=1).fit(X)
-    lab = kmeans_mod.labels_
-    #labels = kmeans_model.labels_
-    print count, metrics.calinski_harabaz_score(X, lab)
-
-
 # In[83]:
 
 from sklearn.cluster import KMeans

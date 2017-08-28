@@ -1,4 +1,9 @@
 - use a supervised machine learning, exploting the fact that there might exists class of topics which group words together
+    -> see https://miguelmalvarez.com/2015/03/20/classifying-reuters-21578-collection-with-python-representing-the-data/
+    -> see the Reuters Supervised Learning notebook I created for this
+    -> see the Naive Pipeline notebook, too.
+
+    -> see this: http://scikit-learn.org/stable/modules/svm.html
 
 - do a 'sensitivity' test using different distances (e.g. euclidean and cosine similarity).
 
@@ -10,4 +15,9 @@
 
 - investigate topic approach instead of article approach (via dirichlet, or perhaps bayesian probability)
 
+- Python provides an excellent environment for performing basic text processing and feature extraction. However, it is not able to perform the numerically intensive calculations required by machine learning methods nearly as quickly as lower-level languages such as C. Thus, if you attempt to use the pure-Python machine learning implementations (such as nltk.NaiveBayesClassifier) on large datasets, you may find that the learning algorithm takes an unreasonable amount of time and memory to complete.
+
+If you plan to train classifiers with large amounts of training data or a large number of features, we recommend that you explore NLTK's facilities for interfacing with external machine learning packages. Once these packages have been installed, NLTK can transparently invoke them (via system calls) to train classifier models significantly faster than the pure-Python classifier implementations. See the NLTK webpage for a list of recommended machine learning packages that are supported by NLTK.
+
+- about Reuters : http://curtis.ml.cmu.edu/w/courses/index.php/File:Reutersdata.png
 

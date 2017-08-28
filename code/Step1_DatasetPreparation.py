@@ -6,30 +6,31 @@
 import pandas as pd
 
 
-# In[2]:
+# In[41]:
 
 filepath_or_buffer = '../data/articles.csv'
 
 
-# In[3]:
+# In[42]:
 
 #import a data frame with 4 columns: orders, titles, descriptions, and articles
 df = pd.read_csv(filepath_or_buffer)
-print "number of articles: ",df.shape[0]
+num_of_articles=df.shape[0]
+print "number of articles: ",num_of_articles
 
 
-# In[4]:
+# In[43]:
 
 header_df = list(df)
 print header_df
 
 
-# In[5]:
+# In[44]:
 
 feed_article = df['feed_article']
 
 
-# In[6]:
+# In[45]:
 
 from bs4 import BeautifulSoup
 feed_article_clean = []
@@ -39,12 +40,17 @@ for text in feed_article:
     feed_article_clean.append(text)
 
 
-# In[9]:
+# In[46]:
+
+print feed_article_clean
+
+
+# In[47]:
 
 # here I define a tokenizer and stemmer which returns the set of stems in the text that it is passed
 from nltk.stem.snowball import SnowballStemmer
 stemmer = SnowballStemmer("english", ignore_stopwords=True)
-
+import re
 def tokenize_and_stem(text):
     # first tokenize by sentence, then by word to ensure that punctuation is caught as it's own token
     tokens = [word for sent in nltk.sent_tokenize(text) for word in nltk.word_tokenize(sent)]
@@ -57,7 +63,28 @@ def tokenize_and_stem(text):
     return stems
 
 
-# In[36]:
+# In[48]:
+
+import nltk
+token_stems = []
+for i in range(num_of_articles):
+    print i
+    token_stems.append(tokenize_and_stem(feed_article_clean[i]))
+#print token_stems
+
+
+# In[49]:
+
+import csv
+csvfile='tokenized_stems.csv'
+with open(csvfile, "w") as output:
+    writer = csv.writer(output, lineterminator='\n')
+    for val in token_stems:
+        print val
+        writer.writerow([val])    
+
+
+# In[12]:
 
 import nltk
 import re
@@ -75,7 +102,16 @@ num_terms = tfidf_matrix.shape[1]
 print(num_terms)
 
 
-# In[ ]:
+# In[10]:
+
+tfidf_mat = tfidf_matrix.toarray()
+print tfidf_mat
 
 
+# In[16]:
+
+import numpy as np
+
+tfidf_df = pd.DataFrame(data=tfidf_mat.astype(float))
+tfidf_df.to_csv('tfidf_mat.csv', sep=' ', header=False, float_format='%.5f', index=False)
 

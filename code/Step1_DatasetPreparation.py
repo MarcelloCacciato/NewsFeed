@@ -30,22 +30,22 @@ print header_df
 feed_article = df['feed_article']
 
 
-# In[45]:
+# In[59]:
 
 from bs4 import BeautifulSoup
-feed_article_clean = []
+feed_article_parsed = []
 for text in feed_article:
     text = BeautifulSoup(text, 'html.parser').getText()
     #strips html formatting and converts to unicode
-    feed_article_clean.append(text)
+    feed_article_parsed.append(text)
 
 
-# In[46]:
+# In[60]:
 
-print feed_article_clean
+print feed_article_parsed
 
 
-# In[47]:
+# In[61]:
 
 # here I define a tokenizer and stemmer which returns the set of stems in the text that it is passed
 from nltk.stem.snowball import SnowballStemmer
@@ -63,24 +63,23 @@ def tokenize_and_stem(text):
     return stems
 
 
-# In[48]:
+# In[62]:
 
 import nltk
 token_stems = []
 for i in range(num_of_articles):
     print i
-    token_stems.append(tokenize_and_stem(feed_article_clean[i]))
-#print token_stems
+    token_stems.append(tokenize_and_stem(feed_article_parsed[i]))
 
 
-# In[49]:
+# In[70]:
 
 import csv
+import ast
 csvfile='tokenized_stems.csv'
 with open(csvfile, "w") as output:
     writer = csv.writer(output, lineterminator='\n')
     for val in token_stems:
-        print val
         writer.writerow([val])    
 
 

@@ -1,33 +1,70 @@
 
 # coding: utf-8
 
-# In[7]:
+# In[18]:
 
 import csv
 import numpy as np
 reader = csv.reader(open("tfidf_mat.csv", "rb"), delimiter=" ")
 x = list(reader)
-X = np.array(x).astype("float")
+xx = np.array(x).astype("float")
+from sklearn.metrics.pairwise import cosine_similarity
+X = 1 - cosine_similarity(xx)
 
 
-# In[14]:
+# In[28]:
 
 from sklearn.cluster import AffinityPropagation
 from sklearn import metrics
 
 # Compute Affinity Propagation
-af = AffinityPropagation().fit(X)
+for damp in np.arange(0.5,1.0,0.05):
+    af = AffinityPropagation(damping=damp).fit(X)
+    cluster_centers_indices = af.cluster_centers_indices_
+    labels = af.labels_
+
+    n_clusters_ = len(cluster_centers_indices)
+    print('Damping:',damp)
+    print('   Estimated number of clusters: %d' % n_clusters_)
+    print("   Silhouette Coefficient: %0.3f"
+        % metrics.silhouette_score(X, labels, metric='cosine'))
+    print("   Calinski_Harabaz Coefficient: %0.3f"
+        % metrics.calinski_harabaz_score(X, labels))
+
+
+# In[22]:
+
+damp=0.6
+af = AffinityPropagation(damping=damp).fit(X)
 cluster_centers_indices = af.cluster_centers_indices_
 labels = af.labels_
 
 n_clusters_ = len(cluster_centers_indices)
 
-print('Estimated number of clusters: %d' % n_clusters_)
-print("Silhouette Coefficient: %0.3f"
-      % metrics.silhouette_score(X, labels, metric='sqeuclidean'))
+print labels
 
 
-# In[18]:
+# In[27]:
+
+import collections
+a = labels
+counter=collections.Counter(a)
+print(counter)
+# Counter({1: 4, 2: 4, 3: 2, 5: 2, 4: 1})
+print(counter.values())
+# [4, 4, 2, 1, 2]
+print(counter.keys())
+# [1, 2, 3, 4, 5]
+print(counter.most_common(33))
+# [(1, 4), (2, 4), (3, 2)]
+
+
+# In[ ]:
+
+
+
+
+# In[3]:
 
 from sklearn.cluster import MeanShift, estimate_bandwidth
 # The following bandwidth can be automatically detected using
@@ -50,7 +87,7 @@ print("number of estimated clusters : %d" % n_clusters_)
 from sklearn.cluster import spectral_clustering
 
 
-# In[21]:
+# In[7]:
 
 from sklearn import cluster, datasets, mixture
 
@@ -92,11 +129,12 @@ affinity_propagation = cluster.AffinityPropagation(damping=params['damping'], pr
 clustering_algorithms = (
         #('MiniBatchKMeans', two_means),
     ('AffinityPropagation', affinity_propagation),
-    ('MeanShift', ms),
+    ('MeanShift', ms)
+        #,
         #('SpectralClustering', spectral),
         #('Ward', ward),
         #('AgglomerativeClustering', average_linkage),
-    ('DBSCAN', dbscan)
+        #('DBSCAN', dbscan)
         #,
         #('Birch', birch),
         #('GaussianMixture', gmm)
@@ -104,6 +142,9 @@ clustering_algorithms = (
 for name, algorithm in clustering_algorithms:
     algorithm.fit(X)
     y_pred = algorithm.predict(X)
+    print('Estimated number of clusters: %d' % n_clusters_)
+    print("Silhouette Coefficient: %0.3f"
+      % metrics.silhouette_score(X, y_pred, metric='cosine'))
 
 
 # In[22]:

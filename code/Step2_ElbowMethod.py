@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[6]:
+# In[1]:
 
 import csv
 import numpy as np
@@ -10,63 +10,49 @@ x = list(reader)
 X = np.array(x).astype("float")
 
 
-# In[7]:
+# In[2]:
 
 # k means determine k
 from sklearn.cluster import KMeans
 from scipy.spatial.distance import cdist
 distortions = []
 K = [10,20,30,40,50]
-#range(1,10)
 for k in K:
     kmeanModel = KMeans(n_clusters=k).fit(X)
     kmeanModel.fit(X)
+    #sum of the distance between points and cluster centers, as a function of the number of clusters
     distortions.append(sum(np.min(cdist(X, kmeanModel.cluster_centers_, 'euclidean'), axis=1)) / X.shape[0])
 
 
-# In[10]:
+# In[3]:
 
 K = [60,70,80,90,100]
-#range(1,10)
 for k in K:
     kmeanModel = KMeans(n_clusters=k).fit(X)
     kmeanModel.fit(X)
     distortions.append(sum(np.min(cdist(X, kmeanModel.cluster_centers_, 'euclidean'), axis=1)) / X.shape[0])
 
 
-# In[11]:
+# In[4]:
 
 K=[10,20,30,40,50,60,70,80,90,100]
-
-
-# In[12]:
-
-import matplotlib.pyplot as plt
-# Plot the elbow
-plt.plot(K, distortions, 'bx-')
-plt.xlabel('k')
-plt.ylabel('Distortion')
-plt.title('The Elbow Method showing the optimal k')
-plt.show()
-
-
-# In[13]:
-
-#Clearly The Elbow Method using the distorsion does not work well with the data set we have
-# we try by changing the metric from euclidean to cosine
 
 
 # In[14]:
 
 K = [10,20,30,40,50,60,70,80,90,100]
 distortionsCosine = []
+from sklearn import metrics
 for k in K:
     kmeanModel = KMeans(n_clusters=k).fit(X)
     kmeanModel.fit(X)
     distortionsCosine.append(sum(np.min(cdist(X, kmeanModel.cluster_centers_, 'cosine'), axis=1)) / X.shape[0])
+    print("Silhouette Coefficient for k= ",k,": %0.3f"
+      % metrics.silhouette_score(X, kmeanModel.labels_, metric='cosine'))
 
 
-# In[15]:
+
+# In[8]:
 
 def PlotTheElbow(K,disto):
     import matplotlib.pyplot as plt
@@ -78,14 +64,24 @@ def PlotTheElbow(K,disto):
     plt.show()
 
 
-# In[16]:
+# In[10]:
+
+PlotTheElbow(K,distortions)
+
+
+# In[6]:
+
+# Clearly The Elbow Method using the DISTORSION WITH EUCLIDEAN DISTANCE does not work well with the data set we have
+
+
+# In[9]:
 
 PlotTheElbow(K,distortionsCosine)
 
 
 # In[ ]:
 
-# Elbow still not very evident, we will move to different classifiers
+# # Changing the metric from euclidean to cosine: elbow still not very evident but hint for a bend around 40 or so.
 
 
 # In[ ]:

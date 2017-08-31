@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[1]:
+# In[ ]:
 
 #import html
 import pprint
@@ -14,7 +14,7 @@ from sklearn.metrics import confusion_matrix
 from sklearn.svm import SVC
 
 
-# In[2]:
+# In[1]:
 
 from nltk.corpus import reuters 
  

@@ -6,12 +6,12 @@
 import pandas as pd
 
 
-# In[41]:
+# In[2]:
 
 filepath_or_buffer = '../data/articles.csv'
 
 
-# In[42]:
+# In[3]:
 
 #import a data frame with 4 columns: orders, titles, descriptions, and articles
 df = pd.read_csv(filepath_or_buffer)
@@ -19,18 +19,18 @@ num_of_articles=df.shape[0]
 print "number of articles: ",num_of_articles
 
 
-# In[43]:
+# In[4]:
 
 header_df = list(df)
 print header_df
 
 
-# In[44]:
+# In[5]:
 
 feed_article = df['feed_article']
 
 
-# In[59]:
+# In[6]:
 
 from bs4 import BeautifulSoup
 feed_article_parsed = []
@@ -40,12 +40,7 @@ for text in feed_article:
     feed_article_parsed.append(text)
 
 
-# In[60]:
-
-print feed_article_parsed
-
-
-# In[61]:
+# In[7]:
 
 # here I define a tokenizer and stemmer which returns the set of stems in the text that it is passed
 from nltk.stem.snowball import SnowballStemmer
@@ -63,16 +58,15 @@ def tokenize_and_stem(text):
     return stems
 
 
-# In[62]:
+# In[8]:
 
 import nltk
 token_stems = []
 for i in range(num_of_articles):
-    print i
     token_stems.append(tokenize_and_stem(feed_article_parsed[i]))
 
 
-# In[70]:
+# In[9]:
 
 import csv
 import ast
@@ -83,7 +77,7 @@ with open(csvfile, "w") as output:
         writer.writerow([val])    
 
 
-# In[12]:
+# In[11]:
 
 import nltk
 import re
@@ -93,7 +87,7 @@ tfidf_vectorizer = TfidfVectorizer(max_df=0.9, max_features=200000,
                                  min_df=0.01, stop_words='english',
                                  use_idf=True, tokenizer=tokenize_and_stem, ngram_range=(1,3))
 
-get_ipython().magic(u'time tfidf_matrix = tfidf_vectorizer.fit_transform(feed_article_clean)')
+get_ipython().magic(u'time tfidf_matrix = tfidf_vectorizer.fit_transform(feed_article_parsed)')
 print(tfidf_matrix.shape)
 num_articles = tfidf_matrix.shape[0]
 print(num_articles)
@@ -101,13 +95,12 @@ num_terms = tfidf_matrix.shape[1]
 print(num_terms)
 
 
-# In[10]:
+# In[12]:
 
 tfidf_mat = tfidf_matrix.toarray()
-print tfidf_mat
 
 
-# In[16]:
+# In[13]:
 
 import numpy as np
 
